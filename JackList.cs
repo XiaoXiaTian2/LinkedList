@@ -98,7 +98,7 @@ namespace LinkedList
         // 注意防呆 例如插入-1 超過索引 => throw IndexoutOfRange
         public void Insert(int index, T item)
         {
-            if (index < 0)
+            if (index < 0 || index > Count)
             {
                 throw new IndexOutOfRangeException();
             }
@@ -139,7 +139,7 @@ namespace LinkedList
                 throw new ArgumentNullException("list");
             }
 
-            if (Head == null) { Head = list.Head; }
+            if (Head == null) { Head = list.Head; Count += list.Count; }
             else
             {
                 Node<T> node = Head;
@@ -218,19 +218,13 @@ namespace LinkedList
             Node<T> slow = Head;
             Node<T> fast = Head;
 
-            bool result = false;
-            Node<T> initNode = Head;
-            while (initNode != null)
+            while (fast != null && fast.Next != null)
             {
-                if (slow == fast)
-                {
-                    result = true; break;
-                }
-                initNode = initNode.Next;
                 slow = slow.Next;
-                fast = fast.Next?.Next;
+                fast = fast.Next.Next;
+                if (slow == fast) return true;
             }
-            return result;
+            return false;
         }
 
         public IEnumerator GetEnumerator()

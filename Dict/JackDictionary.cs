@@ -118,7 +118,7 @@ namespace Dict
             Entry<TKey, TValue> entry = buckets[index];
             while (entry != null)
             {
-                if (entry.hashCode == num)
+                if (entry.hashCode == num && entry.key.Equals(key))
                 {
                     return entry.value;
                 }

@@ -11,7 +11,8 @@ namespace BinaryTree
     internal class BFSIterator : IEnumerator
     {
         private readonly Queue<Node> _queue = new Queue<Node>();
-        private Tree Tree;
+        private readonly Tree Tree;
+        private Node _current;
 
         public BFSIterator(Tree tree)
         {
@@ -20,43 +21,29 @@ namespace BinaryTree
                 _queue.Enqueue(tree.Root);
         }
 
-        public int index = -1;
-
-        public object Current
-        {
-            get
-            {
-                Tree.Root = _queue.Dequeue();
-
-                if (Tree.Root.Left != null)
-                    _queue.Enqueue(Tree.Root.Left);
-                if (Tree.Root.Right != null)
-                    _queue.Enqueue(Tree.Root.Right);
-
-                return Tree.Root.Data;
-            }
-        }
+        public object Current => _current.Data;
 
         public bool MoveNext()
         {
             if (_queue.Count == 0)
                 return false;
 
-            //Tree.Root = _queue.Dequeue();
+            _current = _queue.Dequeue();
 
-            //if (Tree.Root.Left != null)
-            //    _queue.Enqueue(Tree.Root.Left);
-            //if (Tree.Root.Right != null)
-            //    _queue.Enqueue(Tree.Root.Right);
+            if (_current.Left != null)
+                _queue.Enqueue(_current.Left);
+            if (_current.Right != null)
+                _queue.Enqueue(_current.Right);
 
             return true;
-            //index++;
-            //return ++index < Tree.Count; // 先更新index再比較長度
         }
 
         public void Reset()
         {
-            index = -1;
+            _queue.Clear();
+            if (Tree.Root != null)
+                _queue.Enqueue(Tree.Root);
+            _current = null;
         }
     }
 }
